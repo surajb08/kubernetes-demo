@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-client
+  template:
+    metadata:
+      labels:
+        app: redis-client
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        resources:
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+          name: redis
+      - name: redis-client
+        image: suraj08/redis-client:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8085
+          name: rd-client-port
+
+
+---
+
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-client
+spec:
+  selector:
+    app: redis-client
+  type: ClusterIP
+  ports:
+  - name:  http
+    port:  80
+    targetPort: rd-client-port
