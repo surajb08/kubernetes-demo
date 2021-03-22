@@ -23,13 +23,13 @@ jobs:
         run: |
           docker buildx build --push \
             --tag suraj08/first-app:latest \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 .
+            --platform linux/arm64 .
       - name: build the redis-client image
         working-directory: redis-client
         run: |
           docker buildx build --push \
             --tag suraj08/redis-client:latest \
-            --platform linux/amd64,linux/arm/v7,linux/arm64 .
+            --platform linux/arm64 .
       - name: Merge pre-prod into master branch
         if: github.ref == 'refs/heads/pre-prod'
         uses: devmasx/merge-branch@v1.3.1
