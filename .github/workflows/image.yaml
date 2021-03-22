@@ -17,7 +17,7 @@ jobs:
         with:
           version: latest
       - name: login to docker hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.HUB_TOKEN }}" | docker login -u "${{ secrets.HUB_USER }}" --password-stdin
       - name: build the first-app image
         working-directory: first-app
         run: |
@@ -30,3 +30,17 @@ jobs:
           docker buildx build --push \
             --tag suraj08/redis-client:latest \
             --platform linux/amd64,linux/arm/v7,linux/arm64 .
+      - name: Merge pre-prod into master branch
+        if: github.ref == 'refs/heads/pre-prod'
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          label_name : 'Pre-prod merge into Master'
+          target_branch: 'master'
+          github_token: ${{ github.token }}
+      - name: Merge pre-dev into dev branch
+        if: github.ref == 'refs/heads/pre-dev'
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          label_name : 'Pre-dev merge into dev'
+          target_branch: 'dev'
+          github_token: ${{ github.token }}
