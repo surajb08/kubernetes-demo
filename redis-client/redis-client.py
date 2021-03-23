@@ -11,7 +11,7 @@ class Connection(object):
     _conn = None
 
     @classmethod
-    def __new__(cls,):
+    def __new__(cls):
         if cls._conn is None:
             cls._conn = Redis(host="localhost", port=6379, db=0)
         return cls._conn
