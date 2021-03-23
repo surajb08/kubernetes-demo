@@ -1,0 +1,46 @@
+name: build and push to dockerhub
+
+on:
+  push:
+    branches:
+      - pre-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: install buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          version: latest
+      - name: login to docker hub
+        run: echo "${{ secrets.HUB_TOKEN }}" | docker login -u "${{ secrets.HUB_USER }}" --password-stdin
+      - name: build the first-app image
+        working-directory: first-app
+        run: |
+          docker buildx build --push \
+            --tag suraj08/first-app:latest \
+            --platform linux/arm64 .
+      - name: build the redis-client image
+        working-directory: redis-client
+        run: |
+          docker buildx build --push \
+            --tag suraj08/redis-client:latest \
+            --platform linux/arm64 .
+      - name: Merge pre-prod into master branch
+        if: github.ref == 'refs/heads/pre-prod'
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          label_name : 'Pre-prod merge into Master'
+          target_branch: 'master'
+          github_token: ${{ github.token }}
+      - name: Merge pre-dev into dev branch
+        if: github.ref == 'refs/heads/pre-dev'
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          label_name : 'Pre-dev merge into dev'
+          target_branch: 'dev'
+          github_token: ${{ github.token }}
