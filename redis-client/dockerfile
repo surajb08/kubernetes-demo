@@ -6,7 +6,7 @@ USER redis-client
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir flask redis
+RUN pip install --user --no-cache-dir flask redis
 
 COPY redis-client.py ./
 
