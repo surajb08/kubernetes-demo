@@ -34,13 +34,13 @@ jobs:
         if: github.ref == 'refs/heads/pre-prod'
         uses: devmasx/merge-branch@v1.3.1
         with:
-          label_name : 'Pre-prod merge into Master'
+          type : now
           target_branch: 'master'
           github_token: ${{ github.token }}
       - name: Merge pre-dev into dev branch
         if: github.ref == 'refs/heads/pre-dev'
         uses: devmasx/merge-branch@v1.3.1
-        with:
-          label_name : 'Pre-dev merge into dev'
+        with: 
+          type : now
           target_branch: 'dev'
           github_token: ${{ github.token }}
