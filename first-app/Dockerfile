@@ -6,7 +6,7 @@ USER flask-app
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir flask requests
+RUN pip install --user --no-cache-dir flask requests
 
 COPY first-app.py ./
 
