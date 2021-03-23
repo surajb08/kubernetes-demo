@@ -1,6 +1,6 @@
 FROM python:3.9-alpine3.13
 
-RUN adduser -D flask-app
+RUN apk add curl && adduser -D flask-app
 
 USER flask-app
 
