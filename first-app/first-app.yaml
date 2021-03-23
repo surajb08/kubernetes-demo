@@ -41,5 +41,5 @@ spec:
   ports:
   - name:  http
     port:  8080
-    nodePort: 8080
+    nodePort: 30000
     targetPort: first-app-port
